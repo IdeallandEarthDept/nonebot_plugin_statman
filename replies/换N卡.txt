@@ -1,0 +1,1 @@
+右键桌面空白处，在 NVIDIA 控制面板里按图里顺序改成「高性能 NVIDIA 处理器」，然后点下面的「应用」，最后重启电脑 https://gitcode.net/chearlai/kookfiles/-/raw/master/assets/2023-06/LHqkHeKbD90pr0aw.png

@@ -19,7 +19,7 @@ from nonebot.typing import T_State
 
 #require("requests")
 from pip._vendor import requests
-from nonebot.drivers import aiohttp
+# from nonebot.drivers import aiohttp
 import asyncio
 
 import zipfile
@@ -40,8 +40,9 @@ config = get_plugin_config(Config)
 
 
 current_directory = os.path.dirname(os.path.abspath(__file__))
+stat_directory = os.path.join(current_directory, 'stat')
+reply_directory = os.path.join(current_directory, 'replies')
 csv_path = os.path.join(current_directory, 'main.csv')
-group_path = os.path.join(current_directory, 'group.csv')
 
 
 async def download_file(session, url, filename):
@@ -65,26 +66,6 @@ def unzip_file(zip_path, extract_to):
         zip_ref.extractall(extract_to)
     print(f"解压完成到 {extract_to}")
 
-readFile = on_notice(priority=3, block=False)
-@readFile.handle()
-async def handle_upload(bot: Bot, event: Event):
-    print("On Notice:"+str(event)+"\n")
-    if event.get_event_name() == "notice.group_upload":
-        newFile = event.file
-        if newFile.size <= 3000000:
-            basepath = f"./data/{__plugin_meta__.name}/{newFile.name[:-4]}"  # Remove '.zip' and create a directory
-            if not os.path.exists(basepath):
-                os.makedirs(basepath)
-
-            filepath = os.path.join(basepath, newFile.name)
-            async with aiohttp.ClientSession() as session:
-                if await download_file(session, newFile.url, filepath):
-                    if newFile.name.endswith(".zip"):
-                        unzip_file(filepath, basepath)
-                        check_files(basepath)
-    else:
-        print(event.get_event_description())
-
 def check_files(directory):
     """List files in directory"""
     for root, dirs, files in os.walk(directory):
@@ -93,24 +74,98 @@ def check_files(directory):
         for dir in dirs:
             print(f"Found directory: {dir}")
 
+def load_reply(file_path):
+    reply_path = os.path.join(reply_directory, file_path)
+
+    fileTemp = open(reply_path, mode='r', buffering=-1, encoding="utf-8")
+    result = fileTemp.read()
+    fileTemp.close()
+    return result
+
+#   please note that if you installed the internal plugin "single_session",
+# the notice will be blocked by that thing, and will hence FAIL.
+readFile = on_notice(priority=3, block=False)
+@readFile.handle()
+async def handle_upload(bot: Bot, event: Event):
+    print("On Notice:"+str(event)+"\n")
+    if event.get_event_name() == "notice.group_upload":
+        newFile = event.file
+        if newFile.size <= 3000000 :    # 3MB
+            basepath = f"./data/{__plugin_meta__.name}/{newFile.name}"
+            if newFile.name.endswith(".zip"):
+                basepath = f"./data/{__plugin_meta__.name}/{newFile.name[:-4]}"  # Remove '.zip' and create a directory
+            
+            if not os.path.exists(basepath):
+                os.makedirs(basepath)
+
+            at_heading = MessageSegment.at(event.user_id)+MessageSegment.text("\n（自动回复）"+newFile.name+"的诊断结果：\n")
+
+            filepath = os.path.join(basepath, newFile.name)
+            async with aiohttp.ClientSession() as session:
+                if await download_file(session, newFile.url, filepath):
+                    if newFile.name.endswith(".zip"):
+                        unzip_file(filepath, basepath)
+                        check_files(basepath)
+                        
+                        #check if hmcl.log exists
+                        pathHMCL = os.path.join(basepath, "hmcl.log")
+                        if os.path.exists(pathHMCL):
+                            print("hmcl.log exists")
+                            #search the file for string "Java Version: 1.8.0_411, Oracle Corporation"
+                            with open(pathHMCL, 'r', encoding="utf-8") as file:
+                                data = file.read()
+                                if "Java Version: 1.8.0_411, Oracle Corporation" in data:
+                                    print("Diagnostic: Java Version: 1.8.0_411, Oracle Corporation bug")
+                                    result = load_reply("8u411.txt")
+                                    # await readFile.send(MessageSegment.at()+MessageSegment.text(result))
+                                    await readFile.send(at_heading+result)
+                                else:
+                                    print("[Diag]Not Oracle 8u411")
+
+                                if "Operating System: Mac OS" in data:
+                                    print("Diagnostic: MacOS bug")
+                                    result = load_reply("Mac88.txt")
+                                    await readFile.send(at_heading+result)
+                                else:
+                                    print("[Diag]Not MacOS")
+
+                        pathLatest = os.path.join(basepath, "latest.log")
+                        if os.path.exists(pathLatest):
+                            print("latest.log exists")
+                            #search the file for string "Java Version: 1.8.0_411, Oracle Corporation"
+                            with open(pathLatest, 'r', encoding="utf-8") as file:
+                                data = file.read()
+                                
+                                if "is not supported by active ASM" in data:
+                                    print("Diagnostic: ASM Java bug")
+                                    result = load_reply("aj11.txt")
+                                    await readFile.send(at_heading+result)
+                                else:
+                                    print("[Diag]ASM Java bug")
+
+                                
+                                    
+    else:
+        print(event.get_event_description())
+
+#statistic of text messages
 readMsg = on_message(priority=100, block=False)
 @readMsg.handle()
 async def handle_function(bot: Bot, event: Event, state: T_State):
-    print("Msg Recv:"+str(event)+"\n")
-    print(event.get_type()+"\n")
-   
-
     fileTemp = open(csv_path, mode='a', buffering=-1, encoding="utf-8")
     fileTemp.write(str(event)+"\n")
     fileTemp.close()
     # write the event as a string
     # if the msg is from a qq group
     if event.get_type() == "message":
-        print(str(event.user_id)+"\n")
-        print(str(event.message_type)+"\n")
-        print(event.get_message()+"\n")
+        print(str(event.user_id))
+        print(str(event.message_type))
+        print(event.get_message())
 
-        user_unique_path = os.path.join(current_directory, str(event.user_id)+'.csv')
+        if not os.path.exists(stat_directory):
+            os.makedirs(stat_directory)
+
+        user_unique_path = os.path.join(stat_directory, str(event.user_id)+'.csv')
 
         fileGroup = open(user_unique_path, mode='a', buffering=-1, encoding="utf-8")
         #escape all new lines
@@ -119,7 +174,7 @@ async def handle_function(bot: Bot, event: Event, state: T_State):
         fileGroup.close()
 
         if event.message_type=="group":
-            group_unique_path = os.path.join(current_directory, str(event.group_id)+'G.csv')
+            group_unique_path = os.path.join(stat_directory, str(event.group_id)+'G.csv')
             fileTemp = open(group_unique_path, mode='a', buffering=-1, encoding="utf-8")
             fileTemp.write(str(event)+"\n")
             fileTemp.close()

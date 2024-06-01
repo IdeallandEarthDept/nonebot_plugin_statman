@@ -1,0 +1,14 @@
+如果你愿意为此装新软件，请
+打开这个网站：https://sysceo.com/dc
+下载OL版 并按默认安装
+设置免扫码登录教程 https://www.sysceo.com/forum/thread-48319-1-1.html
+打开后 点绿色按钮 然后截图
+如果界面内赫然显示显卡是红色图标 那就直接点绿色按钮
+然后更新完驱动 若提示需要重启 请按指示重启电脑
+
+否则的话，可自行去官网查找驱动
+Intel 显卡驱动列表：https://www.intel.com/content/www/us/en/support/articles/000090440/graphics.html
+AMD 显卡驱动列表：https://www.amd.com/zh-hans/support
+NVIDIA 显卡驱动列表：https://www.nvidia.com/download/index.aspx
+
+1.7.10 Intel 显卡兼容模组：https://gh.ddlc.top/https://github.com/makamys/Neodymium/releases/download/0.2.3/neodymium-1.7.10-0.2.3.jar

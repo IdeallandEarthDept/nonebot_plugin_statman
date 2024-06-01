@@ -1,0 +1,5 @@
+装 Night Config Fixes 模组 https://www.mcmod.cn/class/9007.html
+如果你不会从百科下载，请根据版本尝试下面的链接：
+【1.20.1】 https://mediafilez.forgecdn.net/files/4614/68/NightConfigFixes-v8.0.0-1.20.1-Forge.jar
+【1.17~1.19.4】https://gitee.com/zekerzhayard/HMCL-KOOK-Resources/releases/download/2024.2.5/NightConfigFixesPlus-Active-1.0-SNAPSHOT.jar
+【1.16以及以下】https://gitee.com/zekerzhayard/HMCL-KOOK-Resources/releases/download/2024.2.5/NightConfigFixesPlus-Legacy-1.0-SNAPSHOT.jar

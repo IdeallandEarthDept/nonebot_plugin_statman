@@ -1,0 +1,1 @@
+游戏崩溃后在崩溃界面点左下角「导出游戏崩溃信息」（不要点「日志」），然后把导出的压缩包整个发上来 https://gitcode.net/chearlai/kookfiles/-/raw/master/assets/2023-01/Bw9D08fUJ10m60e7.png

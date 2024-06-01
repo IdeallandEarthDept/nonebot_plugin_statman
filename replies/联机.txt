@@ -1,0 +1,3 @@
+联机教程：https://bilibili.com/search?keyword=Minecraft%E8%81%94%E6%9C%BA
+装联机模组，在开放局域网的时候把「在线模式」关掉 https://www.mcmod.cn/class/2754.html
+1.16.5 修复多人联机模组：https://gh.ddlc.top/https://github.com/MCTeamPotato/MultiOfflineFix/releases/download/1.0.3/MultiOfflineFix-forge-1.0.3+1.16.4.jar

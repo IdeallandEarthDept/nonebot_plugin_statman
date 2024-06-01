@@ -1,0 +1,1 @@
+把「查看日志」打开再启动游戏，如果日志界面一直在滚动，那就说明没卡住，如果卡住了，那就点日志界面右下角的「导出游戏运行栈」，然后把导出的文件发出来 https://gitcode.net/chearlai/kookfiles/-/raw/master/assets/2023-04/SuAn2sjIow0md0b6.png https://gitcode.net/chearlai/kookfiles/-/raw/master/assets/2023-06/06kkZoEmeP0m2061.png https://gitcode.net/chearlai/kookfiles/-/raw/master/assets/2023-06/mxJBSKy89i0mc0dp.png

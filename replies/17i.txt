@@ -1,0 +1,4 @@
+1.7.10 intel显卡
+打开这个网站：https://alist.8mi.tech
+搜索并下载 neodymium-1.7.10
+下完之后，拖放到 模组管理页面（或mods文件夹）
