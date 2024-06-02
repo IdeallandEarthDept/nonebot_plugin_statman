@@ -109,35 +109,6 @@ async def handle_upload(bot: Bot, event: Event):
                         check_files(basepath)
                         
                         encode_format = "gb2312"
-                        if os.path.exists(pathHMCL):
-                            encode_format = "utf-8"
-
-                        #check if hmcl.log exists
-                        
-                        if os.path.exists(pathHMCL):
-                            print("hmcl.log exists")
-                            #search the file for string "Java Version: 1.8.0_411, Oracle Corporation"
-                            with open(pathHMCL, 'r', encoding=encode_format) as file:
-                                try:
-                                    data = file.read()
-                                except UnicodeDecodeError:
-                                    encode_format = "utf-8"
-                                    file.seek(0)
-                                    data = file.read()
-                                if "Java Version: 1.8.0_411, Oracle Corporation" in data:
-                                    print("Diagnostic: Java Version: 1.8.0_411, Oracle Corporation bug")
-                                    result = load_reply("8u411.txt")
-                                    # await readFile.send(MessageSegment.at()+MessageSegment.text(result))
-                                    await readFile.send(at_heading+result)
-                                else:
-                                    print("[Diag]Not Oracle 8u411")
-
-                                if "Operating System: Mac OS" in data:
-                                    print("Diagnostic: MacOS bug")
-                                    result = load_reply("Mac88.txt")
-                                    await readFile.send(at_heading+result)
-                                else:
-                                    print("[Diag]Not MacOS")
 
                         pathLatest = os.path.join(basepath, "latest.log")
                         
@@ -159,7 +130,13 @@ async def handle_upload(bot: Bot, event: Event):
                                     file.seek(0)
                                     data = file.read()
                                 
-                                if "is not supported by active ASM" in data:
+                                #--fml.mcVersion, 1.20
+                                if ("is not supported by active ASM" in data) and (("--fml.mcVersion, 1.20" in data) or ("--fml.mcVersion, 1.19" in data) or ("--fml.mcVersion, 1.18" in data)):
+                                    print("Diagnostic: ASM Java bug")
+                                    result = load_reply("asmj17.txt")
+                                    await readFile.send(at_heading+result)
+
+                                if (("is not supported by active ASM" in data) or ("Unsupported JNI version detected" in data)) and ("--fml.mcVersion, 1.16" in data):
                                     print("Diagnostic: ASM Java bug")
                                     result = load_reply("aj11.txt")
                                     await readFile.send(at_heading+result)
@@ -172,6 +149,11 @@ async def handle_upload(bot: Bot, event: Event):
                                 if "com.electronwill.nightconfig.core.io.ParsingException: Not enough data available" in data:
                                     print("Diagnostic: nightconfig")
                                     result = load_reply("nightconfig.txt")
+                                    await readFile.send(at_heading+result)
+
+                                if "The driver does not appear to support OpenGL" in data:
+                                    print("Diagnostic: driver")
+                                    result = load_reply("驱动.txt")
                                     await readFile.send(at_heading+result)
                             
                                 if ("OutOfMemoryError" in data) or ("GL_OUT_OF_MEMORY" in data):
@@ -230,6 +212,39 @@ async def handle_upload(bot: Bot, event: Event):
                                     result = load_reply("defineAnonymousClass.txt")
                                     await readFile.send(at_heading+result)
 
+                            #check if hmcl.log exists
+                        if os.path.exists(pathHMCL):
+                            print("hmcl.log exists")
+                            encode_format = "utf-8"
+                            with open(pathLatest, 'r', encoding=encode_format) as file:
+                                try:
+                                    data = file.read()
+                                except UnicodeDecodeError:
+                                    encode_format = "gb2312"
+
+                            with open(pathHMCL, 'r', encoding=encode_format) as file:
+                                data = file.read()
+        
+                                if "Java Version: 1.8.0_411, Oracle Corporation" in data:
+                                    print("Diagnostic: Java Version: 1.8.0_411, Oracle Corporation bug")
+                                    result = load_reply("8u411.txt")
+                                    # await readFile.send(MessageSegment.at()+MessageSegment.text(result))
+                                    await readFile.send(at_heading+result)
+                                else:
+                                    print("[Diag]Not Oracle 8u411")
+
+                                if "Operating System: Mac OS" in data:
+                                    print("Diagnostic: MacOS bug")
+                                    result = load_reply("Mac88.txt")
+                                    await readFile.send(at_heading+result)
+                                else:
+                                    print("[Diag]Not MacOS")
+                                
+                                if "Crash cause: MEMORY_EXCEEDED" in data:
+                                    print("Diagnostic: MEMORY_EXCEEDED")
+                                    result = load_reply("MEMORY_EXCEEDED.txt")
+                                    await readFile.send(at_heading+result)
+                                
                                 
                                     
     else:

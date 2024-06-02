@@ -1,7 +1,11 @@
 【解决方案】
-如果你没装java11，先装https://download.bell-sw.com/java/11.0.13+8/bellsoft-jre11.0.13+8-windows-amd64-full.msi
-如果你已经装了，那么
-在启动器中按图里的操作顺序把 Java 路径改成 11.0 开头的 64 位版本 https://gitcode.net/chearlai/kookfiles/-/raw/master/assets/2023-04/SuAn2sjIow0md0b6.png https://gitcode.net/chearlai/kookfiles/-/raw/master/assets/2023-05/jGd3akLJRP0me0b7.png
+如果你电脑没有安装 Java 11
+打开这个网站：https://alist.8mi.tech
+搜索 jre11 amd64 msi
+下载，双击打开，并按默认安装
+
+若使用HMCL：装完后请务必关闭启动器再打开
+若使用PCL：装完后请务必在全局设置内点击扫描Java
 
 【病理】
 某些模组使用了asm技术，这使得对java的版本有更高的要求。这个问题一般出现在试图用太新的Java运行1.16.5的时候。
