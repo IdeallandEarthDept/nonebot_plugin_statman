@@ -172,7 +172,7 @@ async def handle_upload(bot: Bot, event: Event):
                                     result = load_reply("mod文件名纯中文.txt")
                                     await readFile.send(at_heading+result)
                                 
-                                if "java.lang.IllegalArgumentException: Unsupported class file major version 64" in data:
+                                if "java.lang.IllegalArgumentException: Unsupported class file major version" in data:
                                     print("Diagnostic: booting ASM 9.3.0 higher than Java 17")
                                     result = load_reply("asmj17.txt")
                                     await readFile.send(at_heading+result)
