@@ -1,0 +1,6 @@
+【解决方案】
+https://img.kookapp.cn/attachments/2024-01/18/65a93a02b894d.json
+下载上面这个文件，然后用它替换掉游戏文件夹里的 config 文件夹里的 serializationisbad.json 文件
+
+【病理】
+无法从Github网站上拉取serializationisbad.json配置文件
