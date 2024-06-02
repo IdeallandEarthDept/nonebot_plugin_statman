@@ -1,0 +1,8 @@
+【解决方案】
+Dungeon Gears 和 Valkyrien Skies 2，选一个删掉。
+
+【成因】
+很不幸地两个mod都没有为对方做出支持，删一个是没办法的事。
+该问题在 Dungeon Gears 和 Valkyrien Skies 的 Issue tracker 中皆有明确记录：
+Infamous-Misadventures/Dungeons-Gear#173
+ValkyrienSkies/Valkyrien-Skies-2#232

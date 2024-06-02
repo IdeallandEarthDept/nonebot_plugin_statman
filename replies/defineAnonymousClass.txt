@@ -1,0 +1,8 @@
+【解决方案】
+根据你的游戏版本，选择更低版本的java进入启动器。
+如果是1.16.5，建议选择java11。发送##j11可查看如何安装java11
+但如果你是rad2整合包，或者是其他的版本，建议选择java8。发送##j8可查看如何安装java8
+
+【成因】
+适用于 1.16 的 Forge 不支持使用 Java 17 及以上版本。
+详细原理：https://github.com/lksj-dev/lksj-codex-zeitgeist/blob/bleeding/dataset/Unsafe-DefineAnonymousClass.md

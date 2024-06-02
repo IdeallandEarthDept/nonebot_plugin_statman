@@ -1,0 +1,13 @@
+【解决方案】
+如果你电脑没有安装 Java 17
+打开这个网站：https://alist.8mi.tech
+搜索 jre17 amd64 msi
+下载，双击打开，并按默认安装
+
+若使用HMCL：装完后请务必关闭启动器再打开
+若使用PCL：装完后请务必在全局设置内点击扫描Java
+
+【成因】
+Forge 1.19.4 使用的 ASM 9.3.0 仍不支持 major version 为 64 的 class 文件，而 major version 64 对应的 Java 大版本号是 20。
+当你试图用java20、java21等版本启动的时候，就会炸。
+详细原理：https://github.com/lksj-dev/lksj-codex-zeitgeist/blob/bleeding/dataset/Java20.md

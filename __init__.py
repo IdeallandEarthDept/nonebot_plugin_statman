@@ -178,7 +178,57 @@ async def handle_upload(bot: Bot, event: Event):
                                     print("Diagnostic: OOM")
                                     result = load_reply("OOM.txt")
                                     await readFile.send(at_heading+result)
+
+                                #3TUSK
+                                if "at nova.committee.enhancedarmaments.init.callback.ProjectileImpactCallback.lambda$static$0(ProjectileImpactCallback.java:17)" in data:
+                                    print("Diagnostic: Enchanted Armaments Reloaded")
+                                    result = load_reply("Enchanted Armaments Reloaded.txt")
+                                    await readFile.send(at_heading+result)
+
+                                if "java.lang.IllegalArgumentException: : Invalid module name: '' is not a Java identifier" in data:
+                                    print("Diagnostic: Mod name bug")
+                                    result = load_reply("mod文件名纯中文.txt")
+                                    await readFile.send(at_heading+result)
+                                
+                                if "java.lang.IllegalArgumentException: Unsupported class file major version 64" in data:
+                                    print("Diagnostic: booting ASM 9.3.0 higher than Java 17")
+                                    result = load_reply("asmj17.txt")
+                                    await readFile.send(at_heading+result)
+
+                                if "java.lang.NoSuchMethodError: sun.security.util.ManifestEntryVerifier.<init>(Ljava/util/jar/Manifest;)V" in data:
+                                    print("Diagnostic:Forge 36.2.26")
+                                    result = load_reply("Forge36.2.26.txt")
+                                    await readFile.send(at_heading+result)
+
+                                if "java.lang.UnsupportedClassVersionError: icyllis/modernui/forge/MixinConnector has been compiled by a more recent version of the Java Runtime (class file version 55.0), this version of the Java Runtime only recognizes class file versions up to 52.0" in data:
+                                    print("Diagnostic: j11ModernUI")
+                                    result = load_reply("j11ModernUI.txt")
+                                    await readFile.send(at_heading+result)
                             
+                                if "java.lang.NoSuchMethodError: net.minecraft.entity.Entity.getDimensionsForge(Lnet/minecraft/entity/Pose;)Lnet/minecraft/entity/EntitySize;" in data:
+                                    print("Diagnostic: Forge 36.2.26 getDimensionsForge")
+                                    result = load_reply("Forge_36.2.26_getDimensionsForge.txt")
+                                    await readFile.send(at_heading+result)
+
+                                if "java.lang.NoSuchMethodError: 'void net.minecraft.server.level.DistanceManager.addRegionTicket" in data:
+                                    print("Diagnostic: OptiFine 1.18.2 H9 pre2")
+                                    result = load_reply("OptiFine_1.18.2_H9_pre.txt")
+                                    await readFile.send(at_heading+result)
+
+                                if "cannot access class sun.security.util.ManifestEntryVerifier" in data:
+                                    print("Diagnostic: ManifestEntryVerifier")
+                                    result = load_reply("ManifestEntryVerifier.txt")
+                                    await readFile.send(at_heading+result)
+
+                                if ("sun.misc.Unsafe.defineAnonymousClass" in data) and ("java.lang.NoSuchMethodException" in data):
+                                    print("Diagnostic: defineAnonymousClass")
+                                    result = load_reply("defineAnonymousClass.txt")
+                                    await readFile.send(at_heading+result)
+
+                                if ("@Redirect conflict. Skipping dungeons_gear.mixins.json:GameRendererMixin" in data) and ("Critical injection failure: Redirector getModifiedDistance1" in data):
+                                    print("Diagnostic: ValkyrienSkies-DungeonGears.txt")
+                                    result = load_reply("defineAnonymousClass.txt")
+                                    await readFile.send(at_heading+result)
 
                                 
                                     

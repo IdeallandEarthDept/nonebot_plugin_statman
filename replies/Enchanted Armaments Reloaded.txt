@@ -1,0 +1,5 @@
+【解决方案】
+更新 Enhanced Armaments Reloaded 到 1.19-1.1.3 或更高版本
+
+【成因】
+Enchanted Armaments Reloaded 版本过低。

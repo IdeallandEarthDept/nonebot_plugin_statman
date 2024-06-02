@@ -1,0 +1,7 @@
+【解决方案】
+不要随便改变已下载mod文件的名字！
+如果你记得你改了什么，改回去。如果你不记得，建议重新下载所有mod。
+
+【成因】
+如果你的文件名是 暮色森林.jar 之类的，那么这么一通流程下来，你得到的模块名会是空字符串，而根据 JLS 9 中对模块声明的要求，空字符串不可用作 Identifier。
+如果你对详细原理感兴趣，参阅：https://github.com/lksj-dev/lksj-codex-zeitgeist/blob/bleeding/dataset/InvalidModuleName.md

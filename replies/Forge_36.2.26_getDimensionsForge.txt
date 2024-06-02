@@ -1,0 +1,6 @@
+【解决方案】
+更新 Forge 到 36.2.39 或更高版本。
+
+【成因】
+你安装的 Mod 中，有至少一个 Mod 只兼容Forge 36.2.39+（适用于 Minecraft 1.16.5）但没有声明版本要求【因为mod作者缺乏经验】，而你的 Forge 不是 36.2.39 或更高版本。
+详细原理：https://github.com/lksj-dev/lksj-codex-zeitgeist/blob/bleeding/dataset/NoSuchMethod-getDimensionsForge.md
