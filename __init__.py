@@ -163,6 +163,10 @@ async def handle_upload(bot: Bot, event: Event):
                                         result = load_reply("OOM.txt")
                                         await readFile.send(at_heading+result)
 
+                                    if ("The requested compatibility level JAVA_21 could not be set. Level is not supported by the active JRE or ASM version" in data):
+                                        print("Diagnostic: j21")
+                                        result = load_reply("j21.txt")
+                                        await readFile.send(at_heading+result)
                                     #3TUSK
                                     if "at nova.committee.enhancedarmaments.init.callback.ProjectileImpactCallback.lambda$static$0(ProjectileImpactCallback.java:17)" in data:
                                         print("Diagnostic: Enchanted Armaments Reloaded")
