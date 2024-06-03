@@ -23,6 +23,7 @@ from pip._vendor import requests
 import asyncio
 
 import zipfile
+from zipfile import BadZipFile
 
 import os
 import zipfile
@@ -105,147 +106,151 @@ async def handle_upload(bot: Bot, event: Event):
             async with aiohttp.ClientSession() as session:
                 if await download_file(session, newFile.url, filepath):
                     if newFile.name.endswith(".zip"):
-                        unzip_file(filepath, basepath)
-                        check_files(basepath)
-                        
-                        encode_format = "gb2312"
-
-                        pathLatest = os.path.join(basepath, "latest.log")
-                        
-                        if os.path.exists(pathLatest):
-                            print("latest.log exists")
-
-                            with open(pathLatest, 'r', encoding=encode_format) as file:
-                                try:
-                                    data = file.read()
-                                except UnicodeDecodeError:
-                                    encode_format = "utf-8"
-
-                            #search the file for string "Java Version: 1.8.0_411, Oracle Corporation"
-                            with open(pathLatest, 'r', encoding=encode_format) as file:
-                                try:
-                                    data = file.read()
-                                except UnicodeDecodeError:
-                                    encode_format = "utf-8"
-                                    file.seek(0)
-                                    data = file.read()
-                                
-                                #--fml.mcVersion, 1.20
-                                if ("is not supported by active ASM" in data) and (("--fml.mcVersion, 1.20" in data) or ("--fml.mcVersion, 1.19" in data) or ("--fml.mcVersion, 1.18" in data)):
-                                    print("Diagnostic: ASM Java bug")
-                                    result = load_reply("asmj17.txt")
-                                    await readFile.send(at_heading+result)
-
-                                if (("is not supported by active ASM" in data) or ("Unsupported JNI version detected" in data)) and ("--fml.mcVersion, 1.16" in data):
-                                    print("Diagnostic: ASM Java bug")
-                                    result = load_reply("aj11.txt")
-                                    await readFile.send(at_heading+result)
-                                
-                                if "You are currently using SerializationIsBad without any patch modules configured." in data:
-                                    print("Diagnostic: serializationisbad")
-                                    result = load_reply("serializationisbad.txt")
-                                    await readFile.send(at_heading+result)
-                                
-                                if "com.electronwill.nightconfig.core.io.ParsingException: Not enough data available" in data:
-                                    print("Diagnostic: nightconfig")
-                                    result = load_reply("nightconfig.txt")
-                                    await readFile.send(at_heading+result)
-
-                                if "The driver does not appear to support OpenGL" in data:
-                                    print("Diagnostic: driver")
-                                    result = load_reply("驱动.txt")
-                                    await readFile.send(at_heading+result)
+                        try:
+                            unzip_file(filepath, basepath)
+                            check_files(basepath)
                             
-                                if ("OutOfMemoryError" in data) or ("GL_OUT_OF_MEMORY" in data):
-                                    print("Diagnostic: OOM")
-                                    result = load_reply("OOM.txt")
-                                    await readFile.send(at_heading+result)
+                            encode_format = "gb2312"
 
-                                #3TUSK
-                                if "at nova.committee.enhancedarmaments.init.callback.ProjectileImpactCallback.lambda$static$0(ProjectileImpactCallback.java:17)" in data:
-                                    print("Diagnostic: Enchanted Armaments Reloaded")
-                                    result = load_reply("Enchanted Armaments Reloaded.txt")
-                                    await readFile.send(at_heading+result)
-
-                                if "java.lang.IllegalArgumentException: : Invalid module name: '' is not a Java identifier" in data:
-                                    print("Diagnostic: Mod name bug")
-                                    result = load_reply("mod文件名纯中文.txt")
-                                    await readFile.send(at_heading+result)
-                                
-                                if "java.lang.IllegalArgumentException: Unsupported class file major version" in data:
-                                    print("Diagnostic: booting ASM 9.3.0 higher than Java 17")
-                                    result = load_reply("asmj17.txt")
-                                    await readFile.send(at_heading+result)
-
-                                if "java.lang.NoSuchMethodError: sun.security.util.ManifestEntryVerifier.<init>(Ljava/util/jar/Manifest;)V" in data:
-                                    print("Diagnostic:Forge 36.2.26")
-                                    result = load_reply("Forge36.2.26.txt")
-                                    await readFile.send(at_heading+result)
-
-                                if "java.lang.UnsupportedClassVersionError: icyllis/modernui/forge/MixinConnector has been compiled by a more recent version of the Java Runtime (class file version 55.0), this version of the Java Runtime only recognizes class file versions up to 52.0" in data:
-                                    print("Diagnostic: j11ModernUI")
-                                    result = load_reply("j11ModernUI.txt")
-                                    await readFile.send(at_heading+result)
+                            pathLatest = os.path.join(basepath, "latest.log")
                             
-                                if "java.lang.NoSuchMethodError: net.minecraft.entity.Entity.getDimensionsForge(Lnet/minecraft/entity/Pose;)Lnet/minecraft/entity/EntitySize;" in data:
-                                    print("Diagnostic: Forge 36.2.26 getDimensionsForge")
-                                    result = load_reply("Forge_36.2.26_getDimensionsForge.txt")
-                                    await readFile.send(at_heading+result)
+                            if os.path.exists(pathLatest):
+                                print("latest.log exists")
 
-                                if "java.lang.NoSuchMethodError: 'void net.minecraft.server.level.DistanceManager.addRegionTicket" in data:
-                                    print("Diagnostic: OptiFine 1.18.2 H9 pre2")
-                                    result = load_reply("OptiFine_1.18.2_H9_pre.txt")
-                                    await readFile.send(at_heading+result)
+                                with open(pathLatest, 'r', encoding=encode_format) as file:
+                                    try:
+                                        data = file.read()
+                                    except UnicodeDecodeError:
+                                        encode_format = "utf-8"
 
-                                if "cannot access class sun.security.util.ManifestEntryVerifier" in data:
-                                    print("Diagnostic: ManifestEntryVerifier")
-                                    result = load_reply("ManifestEntryVerifier.txt")
-                                    await readFile.send(at_heading+result)
+                                #search the file for string "Java Version: 1.8.0_411, Oracle Corporation"
+                                with open(pathLatest, 'r', encoding=encode_format) as file:
+                                    try:
+                                        data = file.read()
+                                    except UnicodeDecodeError:
+                                        encode_format = "utf-8"
+                                        file.seek(0)
+                                        data = file.read()
+                                    
+                                    #--fml.mcVersion, 1.20
+                                    if ("is not supported by active ASM" in data) and (("--fml.mcVersion, 1.20" in data) or ("--fml.mcVersion, 1.19" in data) or ("--fml.mcVersion, 1.18" in data)):
+                                        print("Diagnostic: ASM Java bug")
+                                        result = load_reply("asmj17.txt")
+                                        await readFile.send(at_heading+result)
 
-                                if ("sun.misc.Unsafe.defineAnonymousClass" in data) and ("java.lang.NoSuchMethodException" in data):
-                                    print("Diagnostic: defineAnonymousClass")
-                                    result = load_reply("defineAnonymousClass.txt")
-                                    await readFile.send(at_heading+result)
+                                    if (("is not supported by active ASM" in data) or ("Unsupported JNI version detected" in data)) and ("--fml.mcVersion, 1.16" in data):
+                                        print("Diagnostic: ASM Java bug")
+                                        result = load_reply("aj11.txt")
+                                        await readFile.send(at_heading+result)
+                                    
+                                    if "You are currently using SerializationIsBad without any patch modules configured." in data:
+                                        print("Diagnostic: serializationisbad")
+                                        result = load_reply("serializationisbad.txt")
+                                        await readFile.send(at_heading+result)
+                                    
+                                    if "com.electronwill.nightconfig.core.io.ParsingException: Not enough data available" in data:
+                                        print("Diagnostic: nightconfig")
+                                        result = load_reply("nightconfig.txt")
+                                        await readFile.send(at_heading+result)
 
-                                if ("@Redirect conflict. Skipping dungeons_gear.mixins.json:GameRendererMixin" in data) and ("Critical injection failure: Redirector getModifiedDistance1" in data):
-                                    print("Diagnostic: ValkyrienSkies-DungeonGears.txt")
-                                    result = load_reply("defineAnonymousClass.txt")
-                                    await readFile.send(at_heading+result)
+                                    if "The driver does not appear to support OpenGL" in data:
+                                        print("Diagnostic: driver")
+                                        result = load_reply("驱动.txt")
+                                        await readFile.send(at_heading+result)
+                                
+                                    if ("OutOfMemoryError" in data) or ("GL_OUT_OF_MEMORY" in data):
+                                        print("Diagnostic: OOM")
+                                        result = load_reply("OOM.txt")
+                                        await readFile.send(at_heading+result)
 
-                            #check if hmcl.log exists
-                        if os.path.exists(pathHMCL):
-                            print("hmcl.log exists")
-                            encode_format = "utf-8"
-                            with open(pathLatest, 'r', encoding=encode_format) as file:
-                                try:
+                                    #3TUSK
+                                    if "at nova.committee.enhancedarmaments.init.callback.ProjectileImpactCallback.lambda$static$0(ProjectileImpactCallback.java:17)" in data:
+                                        print("Diagnostic: Enchanted Armaments Reloaded")
+                                        result = load_reply("Enchanted Armaments Reloaded.txt")
+                                        await readFile.send(at_heading+result)
+
+                                    if "java.lang.IllegalArgumentException: : Invalid module name: '' is not a Java identifier" in data:
+                                        print("Diagnostic: Mod name bug")
+                                        result = load_reply("mod文件名纯中文.txt")
+                                        await readFile.send(at_heading+result)
+                                    
+                                    if "java.lang.IllegalArgumentException: Unsupported class file major version" in data:
+                                        print("Diagnostic: booting ASM 9.3.0 higher than Java 17")
+                                        result = load_reply("asmj17.txt")
+                                        await readFile.send(at_heading+result)
+
+                                    if "java.lang.NoSuchMethodError: sun.security.util.ManifestEntryVerifier.<init>(Ljava/util/jar/Manifest;)V" in data:
+                                        print("Diagnostic:Forge 36.2.26")
+                                        result = load_reply("Forge36.2.26.txt")
+                                        await readFile.send(at_heading+result)
+
+                                    if "java.lang.UnsupportedClassVersionError: icyllis/modernui/forge/MixinConnector has been compiled by a more recent version of the Java Runtime (class file version 55.0), this version of the Java Runtime only recognizes class file versions up to 52.0" in data:
+                                        print("Diagnostic: j11ModernUI")
+                                        result = load_reply("j11ModernUI.txt")
+                                        await readFile.send(at_heading+result)
+                                
+                                    if "java.lang.NoSuchMethodError: net.minecraft.entity.Entity.getDimensionsForge(Lnet/minecraft/entity/Pose;)Lnet/minecraft/entity/EntitySize;" in data:
+                                        print("Diagnostic: Forge 36.2.26 getDimensionsForge")
+                                        result = load_reply("Forge_36.2.26_getDimensionsForge.txt")
+                                        await readFile.send(at_heading+result)
+
+                                    if "java.lang.NoSuchMethodError: 'void net.minecraft.server.level.DistanceManager.addRegionTicket" in data:
+                                        print("Diagnostic: OptiFine 1.18.2 H9 pre2")
+                                        result = load_reply("OptiFine_1.18.2_H9_pre.txt")
+                                        await readFile.send(at_heading+result)
+
+                                    if "cannot access class sun.security.util.ManifestEntryVerifier" in data:
+                                        print("Diagnostic: ManifestEntryVerifier")
+                                        result = load_reply("ManifestEntryVerifier.txt")
+                                        await readFile.send(at_heading+result)
+
+                                    if ("sun.misc.Unsafe.defineAnonymousClass" in data) and ("java.lang.NoSuchMethodException" in data):
+                                        print("Diagnostic: defineAnonymousClass")
+                                        result = load_reply("defineAnonymousClass.txt")
+                                        await readFile.send(at_heading+result)
+
+                                    if ("@Redirect conflict. Skipping dungeons_gear.mixins.json:GameRendererMixin" in data) and ("Critical injection failure: Redirector getModifiedDistance1" in data):
+                                        print("Diagnostic: ValkyrienSkies-DungeonGears.txt")
+                                        result = load_reply("defineAnonymousClass.txt")
+                                        await readFile.send(at_heading+result)
+
+                                #check if hmcl.log exists
+                            if os.path.exists(pathHMCL):
+                                print("hmcl.log exists")
+                                encode_format = "utf-8"
+                                with open(pathLatest, 'r', encoding=encode_format) as file:
+                                    try:
+                                        data = file.read()
+                                    except UnicodeDecodeError:
+                                        encode_format = "gb2312"
+
+                                with open(pathHMCL, 'r', encoding=encode_format) as file:
                                     data = file.read()
-                                except UnicodeDecodeError:
-                                    encode_format = "gb2312"
+            
+                                    if "Java Version: 1.8.0_411, Oracle Corporation" in data:
+                                        print("Diagnostic: Java Version: 1.8.0_411, Oracle Corporation bug")
+                                        result = load_reply("8u411.txt")
+                                        # await readFile.send(MessageSegment.at()+MessageSegment.text(result))
+                                        await readFile.send(at_heading+result)
+                                    else:
+                                        print("[Diag]Not Oracle 8u411")
 
-                            with open(pathHMCL, 'r', encoding=encode_format) as file:
-                                data = file.read()
-        
-                                if "Java Version: 1.8.0_411, Oracle Corporation" in data:
-                                    print("Diagnostic: Java Version: 1.8.0_411, Oracle Corporation bug")
-                                    result = load_reply("8u411.txt")
-                                    # await readFile.send(MessageSegment.at()+MessageSegment.text(result))
-                                    await readFile.send(at_heading+result)
-                                else:
-                                    print("[Diag]Not Oracle 8u411")
-
-                                if "Operating System: Mac OS" in data:
-                                    print("Diagnostic: MacOS bug")
-                                    result = load_reply("Mac88.txt")
-                                    await readFile.send(at_heading+result)
-                                else:
-                                    print("[Diag]Not MacOS")
-                                
-                                if "Crash cause: MEMORY_EXCEEDED" in data:
-                                    print("Diagnostic: MEMORY_EXCEEDED")
-                                    result = load_reply("MEMORY_EXCEEDED.txt")
-                                    await readFile.send(at_heading+result)
-                                
-                                
+                                    if "Operating System: Mac OS" in data:
+                                        print("Diagnostic: MacOS bug")
+                                        result = load_reply("Mac88.txt")
+                                        await readFile.send(at_heading+result)
+                                    else:
+                                        print("[Diag]Not MacOS")
+                                    
+                                    if "Crash cause: MEMORY_EXCEEDED" in data:
+                                        print("Diagnostic: MEMORY_EXCEEDED")
+                                        result = load_reply("MEMORY_EXCEEDED.txt")
+                                        await readFile.send(at_heading+result)
+                        except BadZipFile:
+                            print("Zip file is corrupted")
+                            result = "兄弟，你这压缩包损坏了，打不开"
+                            await readFile.send(at_heading+result)            
+                                    
                                     
     else:
         print(event.get_event_description())
