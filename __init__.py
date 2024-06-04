@@ -45,7 +45,6 @@ stat_directory = os.path.join(current_directory, 'stat')
 reply_directory = os.path.join(current_directory, 'replies')
 csv_path = os.path.join(current_directory, 'main.csv')
 
-
 async def download_file(session, url, filename):
     print(f'正在下载 {url} 到 {filename}')
     async with session.get(url, ssl=False) as response:
@@ -103,6 +102,9 @@ async def handle_upload(bot: Bot, event: Event):
 
             filepath = os.path.join(basepath, newFile.name)
             pathHMCL = os.path.join(basepath, "hmcl.log")
+
+            stopDiagnose = False
+
             async with aiohttp.ClientSession() as session:
                 if await download_file(session, newFile.url, filepath):
                     if newFile.name.endswith(".zip"):
@@ -114,6 +116,8 @@ async def handle_upload(bot: Bot, event: Event):
 
                             pathLatest = os.path.join(basepath, "latest.log")
                             
+                            result = ""
+
                             if os.path.exists(pathLatest):
                                 print("latest.log exists")
 
@@ -136,11 +140,13 @@ async def handle_upload(bot: Bot, event: Event):
                                     if ("is not supported by active ASM" in data) and (("--fml.mcVersion, 1.20" in data) or ("--fml.mcVersion, 1.19" in data) or ("--fml.mcVersion, 1.18" in data)):
                                         print("Diagnostic: ASM Java bug")
                                         result = load_reply("asmj17.txt")
+                                        
                                         await readFile.send(at_heading+result)
 
                                     if (("is not supported by active ASM" in data) or ("Unsupported JNI version detected" in data)) and ("--fml.mcVersion, 1.16" in data):
                                         print("Diagnostic: ASM Java bug")
                                         result = load_reply("aj11.txt")
+                                        
                                         await readFile.send(at_heading+result)
                                     
                                     if "You are currently using SerializationIsBad without any patch modules configured." in data:
@@ -167,6 +173,33 @@ async def handle_upload(bot: Bot, event: Event):
                                         print("Diagnostic: j21")
                                         result = load_reply("j21.txt")
                                         await readFile.send(at_heading+result)
+
+                                    if "Failed to install mod /djpadbit/Sound-Physics/releases/download/1.0.10-1/Sound-Physics-1.12.2" in data:
+                                        print("Diagnostic: Sound-Physics")
+                                        result = load_reply("sound_physics.txt")
+                                        await readFile.send(at_heading+result)
+
+                                    #beikui
+                                    if ("Asking for biomes before we have biomes" in data):
+                                        print("Diagnostic: Asking for biomes before we have biomes")
+                                        result = load_reply("beikui/Asking_for_biomes.txt")
+                                        await readFile.send(at_heading+result)
+
+                                    if ("UncheckedIOException" in data) and ("Invalid paths argument, contained no existing paths:" in data):
+                                        print("Diagnostic: Invalid paths argument,")
+                                        result = load_reply("beikui/Invalid_paths_argument.txt")
+                                        await readFile.send(at_heading+result)
+
+                                    if ("java.lang.Error: Watchdog" in data):
+                                        print("Diagnostic: watchdog")
+                                        result = load_reply("beikui/watchdog_bk.txt")
+                                        await readFile.send(at_heading+result)
+
+                                    if ("RivaTuner Statistics Server (RTSS) is not compatible with Xenon" in data):
+                                        print("Diagnostic: RTSS")
+                                        result = load_reply("beikui/rtss.txt")
+                                        await readFile.send(at_heading+result)
+
                                     #3TUSK
                                     if "at nova.committee.enhancedarmaments.init.callback.ProjectileImpactCallback.lambda$static$0(ProjectileImpactCallback.java:17)" in data:
                                         print("Diagnostic: Enchanted Armaments Reloaded")
@@ -219,7 +252,7 @@ async def handle_upload(bot: Bot, event: Event):
                                         await readFile.send(at_heading+result)
 
                                 #check if hmcl.log exists
-                            if os.path.exists(pathHMCL):
+                            if result == "" and os.path.exists(pathHMCL):
                                 print("hmcl.log exists")
                                 encode_format = "utf-8"
                                 with open(pathLatest, 'r', encoding=encode_format) as file:
@@ -230,14 +263,6 @@ async def handle_upload(bot: Bot, event: Event):
 
                                 with open(pathHMCL, 'r', encoding=encode_format) as file:
                                     data = file.read()
-            
-                                    if "Java Version: 1.8.0_411, Oracle Corporation" in data:
-                                        print("Diagnostic: Java Version: 1.8.0_411, Oracle Corporation bug")
-                                        result = load_reply("8u411.txt")
-                                        # await readFile.send(MessageSegment.at()+MessageSegment.text(result))
-                                        await readFile.send(at_heading+result)
-                                    else:
-                                        print("[Diag]Not Oracle 8u411")
 
                                     if "Operating System: Mac OS" in data:
                                         print("Diagnostic: MacOS bug")
@@ -250,6 +275,19 @@ async def handle_upload(bot: Bot, event: Event):
                                         print("Diagnostic: MEMORY_EXCEEDED")
                                         result = load_reply("MEMORY_EXCEEDED.txt")
                                         await readFile.send(at_heading+result)
+                                    
+                                    # if "Crash cause: GRAPHICS_DRIVER" in data:
+                                    #     print("Diagnostic: GRAPHICS_DRIVER")
+                                    #     result = load_reply("hmcl/GRAPHICS_DRIVER.txt")
+                                    #     await readFile.send(at_heading+result)
+
+                                    if "Java Version: 1.8.0_411, Oracle Corporation" in data:
+                                        print("Diagnostic: Java Version: 1.8.0_411, Oracle Corporation bug")
+                                        result = load_reply("8u411.txt")
+                                        # await readFile.send(MessageSegment.at()+MessageSegment.text(result))
+                                        await readFile.send(at_heading+result)
+                                    else:
+                                        print("[Diag]Not Oracle 8u411")
                         except BadZipFile:
                             print("Zip file is corrupted")
                             result = "兄弟，你这压缩包损坏了，打不开"
@@ -289,4 +327,11 @@ async def handle_function(bot: Bot, event: Event, state: T_State):
             fileTemp = open(group_unique_path, mode='a', buffering=-1, encoding="utf-8")
             fileTemp.write(str(event)+"\n")
             fileTemp.close()
+
+            if (("为啥" in newMsg) or ("为什么" in newMsg) or ("怎么" in newMsg) or ("咋" in newMsg)) and (("踢" in newMsg) and ("我" in newMsg)) :
+                if event.group_id == 666546887 or event.group_id == 625927837:
+                    at_heading = MessageSegment.at(event.user_id)+MessageSegment.text("\n（自动回复）")
+                    print("Auto-reply: 为什么踢我")
+                    result = load_reply("hmcl/why_kick_me.txt")
+                    await readFile.send(at_heading+result)
     pass

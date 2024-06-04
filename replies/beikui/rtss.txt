@@ -1,0 +1,10 @@
+【解决方案】
+完全禁用（或卸载）RivaTuner Statistics Server 应用程序，或卸载钠系列的模组（铷、Embeddium等）。
+
+【病理】
+RTSS软件与钠系列模组冲突
+
+【其他】
+将javaw.exe进程添加到RTSS的排除列表中并不足以解决问题，因为它仍会将自己注入所有正在运行的游戏和应用程序中。由于我们无法检测注入的模块是否真的在做某事，因此游戏将同样崩溃。
+
+如果您不记得曾经使用或安装过 RivaTuner Statistics Server，请检查您是否安装了 MSI Afterburner（或类似软件），因为它们通常捆绑在一起。

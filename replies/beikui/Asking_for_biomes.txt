@@ -1,0 +1,8 @@
+【解决方案】
+在-- Chunk to be generated --下找到Location后面出错的区块的位置（例如：-41,-22），然后在地图编辑器删除该区块。
+
+详细可见：
+ https://www.bilibili.com/read/cv30827535/?spm_id_from=333.999.0.0
+
+【病理】
+地图存档生物群系数据出错
