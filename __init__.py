@@ -4,6 +4,7 @@ from nonebot.plugin import PluginMetadata
 
 from .config import Config
 
+from random import randint
 from nonebot import on_command
 from nonebot import on_message
 from nonebot import on_notice
@@ -22,7 +23,6 @@ import hashlib
 #require("requests")
 from pip._vendor import requests
 # from nonebot.drivers import aiohttp
-import asyncio
 
 import zipfile
 from zipfile import BadZipFile
@@ -378,12 +378,29 @@ async def handle_function(bot: Bot, event: Event, state: T_State):
     fileTemp = open(csv_path, mode='a', buffering=-1, encoding="utf-8")
     fileTemp.write(str(event)+"\n")
     fileTemp.close()
+
     # write the event as a string
     # if the msg is from a qq group
     if event.get_type() == "message":
         print(str(event.user_id))
         print(str(event.message_type))
         print(event.get_message())
+
+        if event.reply:
+            reply_qq = {segment.data["qq"] for segment in event.original_message["at"]}
+            print("===============Reply Detected============")
+
+            print(event.get_message())
+            # if the message contains "反对"
+            if "反对" in str(event.get_message()):
+                # if the message is from an admin
+                # if event.sender.role == "admin":
+                await asyncio.sleep(randint(0, 2))  # 睡眠随机时间，避免黑号
+                # recall the message that is being replied
+                print("===============Recalling message============")
+                await bot.delete_msg(message_id=event.reply.message_id)
+
+
 
         if not os.path.exists(stat_directory):
             os.makedirs(stat_directory)
