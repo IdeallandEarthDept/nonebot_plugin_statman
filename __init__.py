@@ -17,6 +17,8 @@ import os.path
 
 from nonebot.adapters.onebot.v11 import Message, MessageSegment, Bot, Event
 from nonebot.typing import T_State
+from nonebot.adapters.onebot.v11.permission import GROUP_ADMIN, GROUP_OWNER
+from nonebot.permission import SUPERUSER
 
 import hashlib
 
@@ -371,6 +373,35 @@ async def handle_upload(bot: Bot, event: Event):
     else:
         print(event.get_event_description())
 
+#recall message
+recallMsg = on_message(priority=100, block=False, permission=SUPERUSER | GROUP_ADMIN | GROUP_OWNER)
+@recallMsg.handle()
+async def handle_recall(bot: Bot, event: Event, state: T_State):
+    fileTemp = open(csv_path, mode='a', buffering=-1, encoding="utf-8")
+    fileTemp.write(str(event)+"\n")
+    fileTemp.close()
+
+    # write the event as a string
+    # if the msg is from a qq group
+    if event.get_type() == "message":
+        # print(str(event.user_id))
+        # print(str(event.message_type))
+        # print(event.get_message())
+
+        if event.reply:
+            reply_qq = {segment.data["qq"] for segment in event.original_message["at"]}
+            # print("===============Reply Detected============")
+
+            # print(event.get_message())
+            # if the message contains "反对"
+            if ("反对" in str(event.get_message())) or ("撤回" in str(event.get_message())) or ("康" in str(event.get_message())):
+                # if the message is from an admin
+                # if event.sender.role == "admin":
+                await asyncio.sleep(randint(0, 2))  # 睡眠随机时间，避免黑号
+                # recall the message that is being replied
+                print("===============Recalling message============")
+                await bot.delete_msg(message_id=event.reply.message_id)
+
 #statistic of text messages
 readMsg = on_message(priority=100, block=False)
 @readMsg.handle()
@@ -386,21 +417,19 @@ async def handle_function(bot: Bot, event: Event, state: T_State):
         print(str(event.message_type))
         print(event.get_message())
 
-        if event.reply:
-            reply_qq = {segment.data["qq"] for segment in event.original_message["at"]}
-            print("===============Reply Detected============")
+        # if event.reply:
+        #     reply_qq = {segment.data["qq"] for segment in event.original_message["at"]}
+        #     print("===============Reply Detected============")
 
-            print(event.get_message())
-            # if the message contains "反对"
-            if "反对" in str(event.get_message()):
-                # if the message is from an admin
-                # if event.sender.role == "admin":
-                await asyncio.sleep(randint(0, 2))  # 睡眠随机时间，避免黑号
-                # recall the message that is being replied
-                print("===============Recalling message============")
-                await bot.delete_msg(message_id=event.reply.message_id)
-
-
+        #     print(event.get_message())
+        #     # if the message contains "反对"
+        #     if "反对" in str(event.get_message()):
+        #         # if the message is from an admin
+        #         # if event.sender.role == "admin":
+        #         await asyncio.sleep(randint(0, 2))  # 睡眠随机时间，避免黑号
+        #         # recall the message that is being replied
+        #         print("===============Recalling message============")
+        #         await bot.delete_msg(message_id=event.reply.message_id)
 
         if not os.path.exists(stat_directory):
             os.makedirs(stat_directory)
