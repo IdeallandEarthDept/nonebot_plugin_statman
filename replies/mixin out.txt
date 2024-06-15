@@ -1,0 +1,1 @@
+在游戏设置里的「Java 虚拟机参数」里加 -Dmixin.debug.export=true，启动游戏，崩溃后把游戏文件夹下的 .mixin.out 文件夹里的 classes 文件夹打包发过来 https://gitcode.net/chearlai/kookfiles/-/raw/master/assets/2023-04/SuAn2sjIow0md0b6.png https://gitcode.net/chearlai/kookfiles/-/raw/master/assets/2023-06/06kkZoEmeP0m2061.png https://gitcode.net/chearlai/kookfiles/-/raw/master/assets/2023-06/B9zltUBaco08d03p.png

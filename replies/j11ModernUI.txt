@@ -3,16 +3,8 @@
 [方案A]直接删除 ModernUI 及所有硬依赖 ModernUI 的 Mod。
 [方案B]或者，使用 Java 11 或以上版本启动游戏，即：
 
-若你没安装Java11，那么
-打开这个网站：https://alist.8mi.tech
-搜索 jre11 amd64 msi
-下载，双击打开，并按默认安装
-接下来
-- 若使用HMCL：装完后请务必关闭启动器再打开
-- 若使用PCL：装完后请务必在全局设置内点击扫描Java
-
-若你已经装了，那么
-在启动器中按图里的操作顺序把 Java 路径改成 11.0 开头的 64 位版本 https://gitcode.net/chearlai/kookfiles/-/raw/master/assets/2023-04/SuAn2sjIow0md0b6.png https://gitcode.net/chearlai/kookfiles/-/raw/master/assets/2023-05/jGd3akLJRP0me0b7.png
+在启动器中按图里的操作顺序把 Java 路径改成 11 开头的 64 位 版本 https://gitcode.net/chearlai/kookfiles/-/raw/master/assets/2023-04/SuAn2sjIow0md0b6.png https://gitcode.net/chearlai/kookfiles/-/raw/master/assets/2023-04/iDbZEzEnbY0md0b6.png
+如果你找不到这样的版本，下载安装这个 Java https://download.bell-sw.com/java/11.0.13%2B8/bellsoft-jre11.0.13+8-windows-amd64-full.msi ，并重启电脑！安装时不要修改任何选项，比如安装路径！，之后就能找到了
 
 【病理】
 适用于 1.16.5 的 ModernUI 编译时使用的 target compatiblity 为 Java 11，因此编译出来的 class 文件中的 major.minor 版本号为 55.0。

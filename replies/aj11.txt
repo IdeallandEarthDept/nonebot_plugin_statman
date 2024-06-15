@@ -1,13 +1,8 @@
 【解决方案】
-若使用HMCL：
 在启动器中按图里的操作顺序把 Java 路径改成 11.0 开头的 64 位版本 https://gitcode.net/chearlai/kookfiles/-/raw/master/assets/2023-04/SuAn2sjIow0md0b6.png https://gitcode.net/chearlai/kookfiles/-/raw/master/assets/2023-04/iDbZEzEnbY0md0b6.png
 如果你找不到这样的版本，下载安装这个 Java https://download.bell-sw.com/java/11.0.13+8/bellsoft-jre11.0.13+8-windows-amd64-full.msi，并重启电脑！安装时不要修改任何选项，比如安装路径！，之后就能找到了
 
 若使用PCL：
-如果你电脑没有安装 Java 11
-打开这个网站：https://alist.8mi.tech
-搜索 jre11 amd64 msi
-下载，双击打开，并按默认安装
 装完后请务必在全局设置内点击扫描Java
 
 【病理】

@@ -1,0 +1,1 @@
+在游戏文件夹里的 config 文件夹里找到 forge.cfg ，用记事本或者其他代码编辑器打开，把里面的 allowEmissiveItems 后面从 true 改成 false，改完后保存并启动游戏即可 https://gitcode.net/chearlai/kookfiles/-/raw/master/assets/2023-03/t5TMrzrjWD0990co.png
