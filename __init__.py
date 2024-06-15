@@ -17,6 +17,8 @@ import os.path
 from nonebot.adapters.onebot.v11 import Message, MessageSegment, Bot, Event
 from nonebot.typing import T_State
 
+import hashlib
+
 #require("requests")
 from pip._vendor import requests
 # from nonebot.drivers import aiohttp
@@ -83,6 +85,14 @@ def load_reply(file_path):
     fileTemp.close()
     return result
 
+def calculate_md5(file_path):
+    hash_md5 = hashlib.md5()
+    with open(file_path, "rb") as f:
+        for chunk in iter(lambda: f.read(4096), b""):
+            hash_md5.update(chunk)
+    return hash_md5.hexdigest()
+
+
 #   please note that if you installed the internal plugin "single_session",
 # the notice will be blocked by that thing, and will hence FAIL.
 readFile = on_notice(priority=3, block=False)
@@ -92,9 +102,9 @@ async def handle_upload(bot: Bot, event: Event):
     if event.get_event_name() == "notice.group_upload":
         newFile = event.file
         if newFile.size <= 3000000 :    # 3MB
-            basepath = f"./data/{__plugin_meta__.name}/{newFile.name}"
+            basepath = f"./data/{__plugin_meta__.name}/{event.user_id}/{newFile.name}"
             if newFile.name.endswith(".zip"):
-                basepath = f"./data/{__plugin_meta__.name}/{newFile.name[:-4]}"  # Remove '.zip' and create a directory
+                basepath = f"./data/{__plugin_meta__.name}/{event.user_id}/{newFile.name[:-4]}"  # Remove '.zip' and create a directory
             
             if not os.path.exists(basepath):
                 os.makedirs(basepath)
@@ -107,15 +117,45 @@ async def handle_upload(bot: Bot, event: Event):
 
             stopDiagnose = False
 
-            #if the file already exists, do not download it again
             if os.path.exists(filepath):
+                user_idx = event.user_id
+                md5_path = os.path.join(basepath, "user_id.txt")
+
                 print("File exists")
+                print("Duplicate file detected")
                 stopDiagnose = True
                 result = "请不要重复发送文件。如果你觉得自己被后来的日志插队了，请以回复的形式引用你过去发送文件的消息。"
-                await bot.set_group_ban(group_id = event.group_id, user_id = event.user_id, duration = 10*60)
-                await readFile.send(at_heading+result)
+                await bot.set_group_ban(group_id=event.group_id, user_id=event.user_id, duration=10*60)
+                await readFile.send(at_heading + result)
+
+                # if os.path.exists(md5_path):
+
+                #     with open(md5_path, 'r') as f:  # 以读取模式打开
+                #         md5sums = f.read().splitlines()
+
+                #     if user_idx in md5sums:
+                #         print("Duplicate file detected")
+                #         stopDiagnose = True
+                #         result = "请不要重复发送文件。如果你觉得自己被后来的日志插队了，请以回复的形式引用你过去发送文件的消息。"
+                #         await bot.set_group_ban(group_id=event.group_id, user_id=event.user_id, duration=10*60)
+                #         await readFile.send(at_heading + result)
+                #     else:
+                #         with open(md5_path, 'a') as f:  # 以追加模式打开，用于写入新的MD5
+                #             f.write(user_idx + "\n")
+                #         print("Passed check. MD5 added to md5sums.txt")
+                # else:
+                #     # 如果md5sums.txt文件不存在，则创建文件并写入首个MD5
+                #     with open(md5_path, 'w') as f:
+                #         f.write(user_idx + "\n")
+                #     print("MD5 file created and MD5 added to md5sums.txt")
+
+                
+                # stopDiagnose = True
+                # result = "请不要重复发送文件。如果你觉得自己被后来的日志插队了，请以回复的形式引用你过去发送文件的消息。"
+                # await bot.set_group_ban(group_id = event.group_id, user_id = event.user_id, duration = 10*60)
+                # await readFile.send(at_heading+result)
             
-            else:
+            if not stopDiagnose:
                 async with aiohttp.ClientSession() as session:
                     if await download_file(session, newFile.url, filepath):
                         if newFile.name.endswith(".zip"):
