@@ -122,13 +122,20 @@ async def handle_upload(bot: Bot, event: Event):
             if os.path.exists(filepath):
                 user_idx = event.user_id
                 md5_path = os.path.join(basepath, "user_id.txt")
+                filesize_path = os.path.join(basepath, "size.txt")
 
-                print("File exists")
-                print("Duplicate file detected")
-                stopDiagnose = True
-                result = "请不要重复发送文件。如果你觉得自己被后来的日志插队了，请以回复的形式引用你过去发送文件的消息。"
-                await bot.set_group_ban(group_id=event.group_id, user_id=event.user_id, duration=10*60)
-                await readFile.send(at_heading + result)
+                if os.path.exists(filepath):
+                    previous_size = os.path.getsize(filepath)
+                    if previous_size == newFile.size:
+                        print("Duplicate file detected")
+                        print("File exists")
+                        print("Duplicate file detected")
+                        stopDiagnose = True
+                        result = "请不要重复发送文件。如果你觉得自己被后来的日志插队了，请以回复的形式引用你过去发送文件的消息。"
+                        await bot.set_group_ban(group_id=event.group_id, user_id=event.user_id, duration=10*60)
+                        await readFile.send(at_heading + result)
+                    else:
+                        print("File exists, but of a different size")
 
                 # if os.path.exists(md5_path):
 
@@ -235,6 +242,11 @@ async def handle_upload(bot: Bot, event: Event):
                                         if "Ticking entity" in data:
                                             print("Diagnostic: Ticking entity")
                                             result = load_reply("Neruina.txt")
+                                            await readFile.send(at_heading+result)
+
+                                        if "java.lang.IllegalStateException: Not building!" in data:
+                                            print("Diagnostic: Not building")
+                                            result = load_reply("notbuilding.txt")
                                             await readFile.send(at_heading+result)
 
                                         #beikui
