@@ -271,6 +271,11 @@ async def handle_upload(bot: Bot, event: Event):
                                             await readFile.send(at_heading+result)
 
                                         #3TUSK
+                                        if "Failed to find service port for display" in data:
+                                            print("Diagnostic: Failed to find service port for display")
+                                            result = load_reply("displayPort.txt")
+                                            await readFile.send(at_heading+result)
+
                                         if "at nova.committee.enhancedarmaments.init.callback.ProjectileImpactCallback.lambda$static$0(ProjectileImpactCallback.java:17)" in data:
                                             print("Diagnostic: Enchanted Armaments Reloaded")
                                             result = load_reply("Enchanted Armaments Reloaded.txt")
