@@ -101,6 +101,7 @@ readFile = on_notice(priority=3, block=False)
 @readFile.handle()
 async def handle_upload(bot: Bot, event: Event):
     print("On Notice:"+str(event)+"\n")
+    await asyncio.sleep(randint(1, 3))  # 睡眠随机时间，避免黑号
     if event.get_event_name() == "notice.group_upload":
         newFile = event.file
         if newFile.size <= 3000000 :    # 3MB
@@ -133,7 +134,7 @@ async def handle_upload(bot: Bot, event: Event):
                         stopDiagnose = True
                         result = "请不要重复发送文件。如果你觉得自己被后来的日志插队了，请以回复的形式引用你过去发送文件的消息。"
                         await bot.set_group_ban(group_id=event.group_id, user_id=event.user_id, duration=10*60)
-                        await readFile.send(at_heading + result)
+                        #await readFile.send(at_heading + result)
                     else:
                         print("File exists, but of a different size")
 
@@ -162,7 +163,7 @@ async def handle_upload(bot: Bot, event: Event):
                 # stopDiagnose = True
                 # result = "请不要重复发送文件。如果你觉得自己被后来的日志插队了，请以回复的形式引用你过去发送文件的消息。"
                 # await bot.set_group_ban(group_id = event.group_id, user_id = event.user_id, duration = 10*60)
-                # await readFile.send(at_heading+result)
+                # #await readFile.send(at_heading+result)
             
             if not stopDiagnose:
                 async with aiohttp.ClientSession() as session:
@@ -201,130 +202,130 @@ async def handle_upload(bot: Bot, event: Event):
                                             print("Diagnostic: ASM Java bug")
                                             result = load_reply("asmj17.txt")
                                             
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
 
                                         if (("is not supported by active ASM" in data) or ("Unsupported JNI version detected" in data)) and ("--fml.mcVersion, 1.16" in data):
                                             print("Diagnostic: ASM Java bug")
                                             result = load_reply("aj11.txt")
                                             
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
                                         
                                         if "You are currently using SerializationIsBad without any patch modules configured." in data:
                                             print("Diagnostic: serializationisbad")
                                             result = load_reply("serializationisbad.txt")
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
                                         
                                         if "com.electronwill.nightconfig.core.io.ParsingException: Not enough data available" in data:
                                             print("Diagnostic: nightconfig")
                                             result = load_reply("nightconfig.txt")
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
 
                                         if "The driver does not appear to support OpenGL" in data:
                                             print("Diagnostic: driver")
                                             result = load_reply("驱动.txt")
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
                                     
                                         if ("OutOfMemoryError" in data) or ("GL_OUT_OF_MEMORY" in data):
                                             print("Diagnostic: OOM")
                                             result = load_reply("OOM.txt")
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
 
                                         if ("The requested compatibility level JAVA_21 could not be set. Level is not supported by the active JRE or ASM version" in data):
                                             print("Diagnostic: j21")
                                             result = load_reply("j21.txt")
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
 
                                         if "Failed to install mod /djpadbit/Sound-Physics/releases/download/1.0.10-1/Sound-Physics-1.12.2" in data:
                                             print("Diagnostic: Sound-Physics")
                                             result = load_reply("sound_physics.txt")
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
 
                                         if "Ticking entity" in data:
                                             print("Diagnostic: Ticking entity")
                                             result = load_reply("Neruina.txt")
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
 
                                         if "java.lang.IllegalStateException: Not building!" in data:
                                             print("Diagnostic: Not building")
                                             result = load_reply("notbuilding.txt")
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
 
                                         #beikui
                                         if ("Asking for biomes before we have biomes" in data):
                                             print("Diagnostic: Asking for biomes before we have biomes")
                                             result = load_reply("beikui/Asking_for_biomes.txt")
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
 
                                         if ("UncheckedIOException" in data) and ("Invalid paths argument, contained no existing paths:" in data):
                                             print("Diagnostic: Invalid paths argument,")
                                             result = load_reply("beikui/Invalid_paths_argument.txt")
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
 
                                         if ("java.lang.Error: Watchdog" in data):
                                             print("Diagnostic: watchdog")
                                             result = load_reply("beikui/watchdog_bk.txt")
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
 
                                         if ("RivaTuner Statistics Server (RTSS) is not compatible with Xenon" in data):
                                             print("Diagnostic: RTSS")
                                             result = load_reply("beikui/rtss.txt")
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
 
                                         #3TUSK
                                         if "Failed to find service port for display" in data:
                                             print("Diagnostic: Failed to find service port for display")
                                             result = load_reply("displayPort.txt")
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
 
                                         if "at nova.committee.enhancedarmaments.init.callback.ProjectileImpactCallback.lambda$static$0(ProjectileImpactCallback.java:17)" in data:
                                             print("Diagnostic: Enchanted Armaments Reloaded")
                                             result = load_reply("Enchanted Armaments Reloaded.txt")
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
 
                                         if "java.lang.IllegalArgumentException: : Invalid module name: '' is not a Java identifier" in data:
                                             print("Diagnostic: Mod name bug")
                                             result = load_reply("mod文件名纯中文.txt")
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
                                         
                                         if "java.lang.IllegalArgumentException: Unsupported class file major version" in data:
                                             print("Diagnostic: booting ASM 9.3.0 higher than Java 17")
                                             result = load_reply("asmj17.txt")
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
 
                                         if "java.lang.NoSuchMethodError: sun.security.util.ManifestEntryVerifier.<init>(Ljava/util/jar/Manifest;)V" in data:
                                             print("Diagnostic:Forge 36.2.26")
                                             result = load_reply("Forge36.2.26.txt")
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
 
                                         if "java.lang.UnsupportedClassVersionError: icyllis/modernui/forge/MixinConnector has been compiled by a more recent version of the Java Runtime (class file version 55.0), this version of the Java Runtime only recognizes class file versions up to 52.0" in data:
                                             print("Diagnostic: j11ModernUI")
                                             result = load_reply("j11ModernUI.txt")
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
                                     
                                         if "java.lang.NoSuchMethodError: net.minecraft.entity.Entity.getDimensionsForge(Lnet/minecraft/entity/Pose;)Lnet/minecraft/entity/EntitySize;" in data:
                                             print("Diagnostic: Forge 36.2.26 getDimensionsForge")
                                             result = load_reply("Forge_36.2.26_getDimensionsForge.txt")
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
 
                                         if "java.lang.NoSuchMethodError: 'void net.minecraft.server.level.DistanceManager.addRegionTicket" in data:
                                             print("Diagnostic: OptiFine 1.18.2 H9 pre2")
                                             result = load_reply("OptiFine_1.18.2_H9_pre.txt")
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
 
                                         if "cannot access class sun.security.util.ManifestEntryVerifier" in data:
                                             print("Diagnostic: ManifestEntryVerifier")
                                             result = load_reply("ManifestEntryVerifier.txt")
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
 
                                         if ("sun.misc.Unsafe.defineAnonymousClass" in data) and ("java.lang.NoSuchMethodException" in data):
                                             print("Diagnostic: defineAnonymousClass")
                                             result = load_reply("defineAnonymousClass.txt")
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
 
                                         if ("@Redirect conflict. Skipping dungeons_gear.mixins.json:GameRendererMixin" in data) and ("Critical injection failure: Redirector getModifiedDistance1" in data):
                                             print("Diagnostic: ValkyrienSkies-DungeonGears.txt")
                                             result = load_reply("defineAnonymousClass.txt")
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
 
                                 if result == "" and os.path.exists(pathMCLG):
                                     print("minecraft.log exists")
@@ -341,7 +342,7 @@ async def handle_upload(bot: Bot, event: Event):
                                         if "kotlin.native.concurrent: Invalid package name: 'native' is not a Java identifier" in data:
                                             print("Diagnostic: Kotlin bug")
                                             result = load_reply("minecraft/nativeIsNotAJavaIdentifier.txt")
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
 
 
                                     #check if hmcl.log exists
@@ -360,25 +361,25 @@ async def handle_upload(bot: Bot, event: Event):
                                         if "Operating System: Mac OS" in data:
                                             print("Diagnostic: MacOS bug")
                                             result = load_reply("Mac88.txt")
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
                                         else:
                                             print("[Diag]Not MacOS")
                                         
                                         if "Crash cause: MEMORY_EXCEEDED" in data:
                                             print("Diagnostic: MEMORY_EXCEEDED")
                                             result = load_reply("MEMORY_EXCEEDED.txt")
-                                            await readFile.send(at_heading+result)
+                                            #await readFile.send(at_heading+result)
                                         
                                         # if "Crash cause: GRAPHICS_DRIVER" in data:
                                         #     print("Diagnostic: GRAPHICS_DRIVER")
                                         #     result = load_reply("hmcl/GRAPHICS_DRIVER.txt")
-                                        #     await readFile.send(at_heading+result)
+                                        #     #await readFile.send(at_heading+result)
 
                                         # if "Java Version: 1.8.0_411, Oracle Corporation" in data:
                                         #     print("Diagnostic: Java Version: 1.8.0_411, Oracle Corporation bug")
                                         #     result = load_reply("8u411.txt")
                                         #     # await readFile.send(MessageSegment.at()+MessageSegment.text(result))
-                                        #     await readFile.send(at_heading+result)
+                                        #     #await readFile.send(at_heading+result)
                                         # else:
                                         #     print("[Diag]Not Oracle 8u411")
                             except BadZipFile:
@@ -414,18 +415,20 @@ async def handle_recall(bot: Bot, event: Event, state: T_State):
             if ("反对" in str(event.get_message())) or ("撤回" in str(event.get_message())) or ("康" in str(event.get_message())):
                 # if the message is from an admin
                 # if event.sender.role == "admin":
-                await asyncio.sleep(randint(0, 2))  # 睡眠随机时间，避免黑号
+                await asyncio.sleep(randint(1, 3))  # 睡眠随机时间，避免黑号
                 # recall the message that is being replied
                 print("===============Recalling message============")
                 await bot.delete_msg(message_id=event.reply.message_id)
 
 #statistic of text messages
 readMsg = on_message(priority=100, block=False)
-@readMsg.handle()
+#@readMsg.handle()
 async def handle_function(bot: Bot, event: Event, state: T_State):
     fileTemp = open(csv_path, mode='a', buffering=-1, encoding="utf-8")
     fileTemp.write(str(event)+"\n")
     fileTemp.close()
+
+    await asyncio.sleep(randint(1, 3))  # 睡眠随机时间，避免黑号
 
     # write the event as a string
     # if the msg is from a qq group
@@ -470,5 +473,5 @@ async def handle_function(bot: Bot, event: Event, state: T_State):
                     at_heading = MessageSegment.at(event.user_id)+MessageSegment.text("\n（自动回复）")
                     print("Auto-reply: 为什么踢我")
                     result = load_reply("hmcl/why_kick_me.txt")
-                    await readFile.send(at_heading+result)
+                    #await readFile.send(at_heading+result)
     pass
