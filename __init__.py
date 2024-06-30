@@ -101,7 +101,7 @@ readFile = on_notice(priority=3, block=False)
 @readFile.handle()
 async def handle_upload(bot: Bot, event: Event):
     print("On Notice:"+str(event)+"\n")
-    await asyncio.sleep(randint(1, 3))  # 睡眠随机时间，避免黑号
+    await asyncio.sleep(randint(1, 5))  # 睡眠随机时间，避免黑号
     if event.get_event_name() == "notice.group_upload":
         newFile = event.file
         if newFile.size <= 3000000 :    # 3MB
@@ -134,7 +134,7 @@ async def handle_upload(bot: Bot, event: Event):
                         stopDiagnose = True
                         result = "请不要重复发送文件。如果你觉得自己被后来的日志插队了，请以回复的形式引用你过去发送文件的消息。"
                         await bot.set_group_ban(group_id=event.group_id, user_id=event.user_id, duration=10*60)
-                        #await readFile.send(at_heading + result)
+                        await readFile.send(at_heading + result)
                     else:
                         print("File exists, but of a different size")
 
