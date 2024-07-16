@@ -94,6 +94,7 @@ def calculate_md5(file_path):
             hash_md5.update(chunk)
     return hash_md5.hexdigest()
 
+blacklist = [2775984452]
 
 #   please note that if you installed the internal plugin "single_session",
 # the notice will be blocked by that thing, and will hence FAIL.
@@ -102,6 +103,14 @@ readFile = on_notice(priority=3, block=False)
 async def handle_upload(bot: Bot, event: Event):
     print("On Notice:"+str(event)+"\n")
     await asyncio.sleep(randint(1, 5))  # 睡眠随机时间，避免黑号
+    if event.notice_type == "group_increase":
+        if event.user_id in blacklist:
+            await bot.set_group_kick(
+                        group_id=event.group_id,
+                        user_id=int(event.user_id),
+                        reject_add_request=True
+                    )
+
     if event.get_event_name() == "notice.group_upload":
         newFile = event.file
         if newFile.size <= 3000000 :    # 3MB
@@ -391,6 +400,26 @@ async def handle_upload(bot: Bot, event: Event):
     else:
         print(event.get_event_description())
 
+#ban
+force_block = on_message(priority=1, block=False)
+@force_block.handle()
+async def handle_block(bot: Bot, event: Event, state: T_State):
+# print(str(event.message_type))
+    # print(event.get_message())
+    print("sssssssssssssssssssssssssssssssssssID：="+str(event.user_id))
+    if (event.user_id  in blacklist):
+        await asyncio.sleep(randint(1, 3))  # 睡眠随机时间，避免黑号
+        # recall the message that is being replied
+        print("ID：="+str(event.user_id))
+        print("===============Recalling message============")
+        await bot.delete_msg(message_id=event.message_id)
+
+        await bot.set_group_kick(
+                        group_id=event.group_id,
+                        user_id=int(event.user_id),
+                        reject_add_request=True
+                    )
+
 #recall message
 recallMsg = on_message(priority=100, block=False, permission=SUPERUSER | GROUP_ADMIN | GROUP_OWNER)
 @recallMsg.handle()
@@ -398,14 +427,10 @@ async def handle_recall(bot: Bot, event: Event, state: T_State):
     fileTemp = open(csv_path, mode='a', buffering=-1, encoding="utf-8")
     fileTemp.write(str(event)+"\n")
     fileTemp.close()
-
+    print("ID：="+str(event.user_id))
     # write the event as a string
     # if the msg is from a qq group
     if event.get_type() == "message":
-        # print(str(event.user_id))
-        # print(str(event.message_type))
-        # print(event.get_message())
-
         if event.reply:
             reply_qq = {segment.data["qq"] for segment in event.original_message["at"]}
             # print("===============Reply Detected============")
