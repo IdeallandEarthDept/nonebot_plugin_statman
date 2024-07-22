@@ -94,7 +94,7 @@ def calculate_md5(file_path):
             hash_md5.update(chunk)
     return hash_md5.hexdigest()
 
-blacklist = [2775984452,3813182141]
+blacklist = [2775984452,3813182141,3373448932]
 
 #   please note that if you installed the internal plugin "single_session",
 # the notice will be blocked by that thing, and will hence FAIL.
